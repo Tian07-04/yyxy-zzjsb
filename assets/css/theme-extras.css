@@ -1,0 +1,614 @@
+/* ============================================================
+   视觉升级包（theme-extras）
+   内容：思源宋体标题 / 党团徽章(象征性) / IP插画 / 微动效
+   说明：保持主样式整洁，所有新增视觉集中于此，便于回滚。
+   移动端安全：动效仅用 transform/opacity，且尊重 prefers-reduced-motion，
+   不引入常驻 will-change，避免复现「滚动回滚后空白」问题。
+   ============================================================ */
+
+:root{
+  /* 衬线字体：政务党建风，文化庄重；正文仍用黑体 */
+  --font-serif:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+}
+
+/* ---------- 标题统一衬线宋体 ---------- */
+.hero__title,
+.section__title,
+.about__title,
+.card__title,
+h1,h2,h3{ font-family:var(--font-serif); }
+
+/* ---------- 章节标题上方：细金红色横条，强化党团识别锚点 ---------- */
+.section__head::after{content:"";position:absolute;left:50%;top:-22px;transform:translateX(-50%);
+  width:42px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2));z-index:3;opacity:.85}
+
+/* 页脚备案号 */
+.footer__beian{font-size:12px;color:var(--muted)}
+.footer__beian a{color:var(--accent-2);text-decoration:none}
+.footer__beian a:hover{text-decoration:underline}
+
+/* ---------- IP 插画（音符 + 红绸）：与清新文艺字风格冲突且是 PC/手机差异源，收起让文艺字水印成为首屏主视觉 ---------- */
+.hero__art{display:none}
+@media (max-width:860px){ .hero__art{display:none} }
+
+/* ---------- 微动效（移动端安全） ---------- */
+@media (prefers-reduced-motion: no-preference){
+  /* 红旗轻飘：仅 transform，合成层友好 */
+  .flag-wave{transform-origin:left center;animation:flagWave 4.6s ease-in-out infinite}
+  @keyframes flagWave{
+    0%,100%{transform:scaleX(1) skewY(0deg)}
+    25%{transform:scaleX(.97) skewY(1.3deg)}
+    50%{transform:scaleX(1.03) skewY(-1deg)}
+    75%{transform:scaleX(.985) skewY(.7deg)}
+  }
+  /* 金色粒子上浮 */
+  .gold-particle{position:absolute;border-radius:50%;
+    background:radial-gradient(circle,#7cc0ff,#42a5f5);
+    opacity:0;animation:goldRise linear infinite;pointer-events:none;z-index:1}
+  @keyframes goldRise{
+    0%{transform:translateY(0) scale(.5);opacity:0}
+    15%{opacity:.85}
+    85%{opacity:.55}
+    100%{transform:translateY(-200px) scale(1);opacity:0}
+  }
+  /* Hero 插画整体定位见上；内部元素浮动由 SVG 内 .float 控制，避免与定位 transform 冲突 */
+}
+
+/* ---------- 导航：CTA 招新按钮（红金液体玻璃药丸） ---------- */
+.nav__cta{
+  color:#fff!important;
+  background:linear-gradient(135deg,var(--brand),#0d47a1)!important;
+  padding:8px 20px;border-radius:22px;font-weight:700;white-space:nowrap;
+  backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);
+  border:1px solid rgba(255,255,255,.38);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.32),
+    inset 0 -1px 2px rgba(0,0,0,.20),
+    0 10px 30px -8px rgba(30,136,229,.65),
+    0 2px 8px -4px rgba(0,0,0,.12);
+  transition:all .2s var(--ease);
+}
+.nav__cta::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.25) 0%,transparent 50%,rgba(255,255,255,.10) 100%);
+  filter:url(#liquidSoft);mix-blend-mode:screen;opacity:.6;
+}
+.nav__cta > *{position:relative;z-index:1}
+.nav__cta:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.40),
+    inset 0 -1px 2px rgba(0,0,0,.25),
+    0 18px 38px -6px rgba(30,136,229,.75)!important;
+}
+
+/* ---------- 招新专区 ---------- */
+.recruit-section{background:linear-gradient(180deg,#f0f7ff,#eaf3fd)}
+.recruit__subtitle{font-family:var(--font-serif);font-size:19px;margin:34px 0 14px;color:var(--brand);text-align:center}
+.timeline{list-style:none;margin:0 auto;padding:0;max-width:760px;display:flex;flex-direction:column}
+.timeline__item{position:relative;display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start;padding:14px 0 14px 28px;border-left:2px solid rgba(30,136,229,.25)}
+.timeline__item::before{content:"";position:absolute;left:-7px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--brand-2);box-shadow:0 0 0 3px rgba(66,165,245,.25)}
+.timeline__date{font-weight:700;color:var(--brand)}
+.timeline__text{color:#2a2433;line-height:1.6}
+.recruit__apply{margin-top:30px;text-align:center;background:#fff;border:1px solid rgba(30,136,229,.12);border-radius:16px;padding:24px;box-shadow:0 10px 30px -18px rgba(13,71,161,.4)}
+.recruit__apply p{margin:0 0 16px;font-size:15px;line-height:1.7}
+.recruit__qr{width:180px;height:180px;object-fit:cover;border-radius:12px;margin:0 auto 16px;display:block;border:1px solid rgba(30,136,229,.15)}
+.recruit__qr--ph{display:flex;align-items:center;justify-content:center;text-align:center;width:180px;height:180px;margin:0 auto 16px;padding:14px;color:#6a6577;font-size:13px;line-height:1.6;background:repeating-linear-gradient(45deg,#fff,#fff 10px,#eef5fd 10px,#eef5fd 20px);border:1px dashed rgba(30,136,229,.35);border-radius:12px}
+@media (max-width:560px){
+  .timeline__item{grid-template-columns:88px 1fr;gap:10px}
+  .recruit__qr,.recruit__qr--ph{width:150px;height:150px}
+}
+
+/* ---------- 导航：搜索按钮（液体玻璃药丸） ---------- */
+.nav__search{
+  order:5;margin-left:6px;width:40px;height:40px;border:none;border-radius:14px;
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);
+  border:1px solid rgba(255,255,255,.60);
+  color:var(--brand);font-size:16px;cursor:pointer;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.90),
+    inset 0 -1px 1px rgba(13,71,161,.06),
+    0 8px 22px -10px rgba(13,71,161,.18),
+    0 2px 6px -3px rgba(0,0,0,.08);
+  transition:all .2s var(--ease);
+}
+.nav__search:hover{
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(22px) saturate(190%);-webkit-backdrop-filter:blur(22px) saturate(190%);
+  transform:translateY(-3px);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.95),
+    0 14px 28px -8px rgba(30,136,229,.25),
+    0 3px 10px -4px rgba(0,0,0,.10);
+}
+
+/* ---------- 办事指南 ---------- */
+.guide{background:#fff;border:1px solid rgba(30,136,229,.1);border-radius:18px;padding:24px 22px;box-shadow:0 14px 36px -24px rgba(13,71,161,.5)}
+.guide__ico{font-size:30px;margin-bottom:6px}
+.guide h3{font-family:var(--font-serif);font-size:18px;margin:4px 0 14px;color:var(--brand)}
+.guide__steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px}
+.guide__steps li{font-size:14.5px;line-height:1.6;color:#2a2433;padding-left:4px}
+.guide__steps li::marker{color:var(--brand-2);font-weight:700}
+
+/* ---------- 通知公告 ---------- */
+.announce{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:2px;border-radius:14px;overflow:hidden;border:1px solid rgba(30,136,229,.1);background:#fff}
+.announce__item{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid rgba(30,136,229,.07)}
+.announce__item:last-child{border-bottom:none}
+.announce__date{font-size:13px;color:#6a6577;flex:0 0 auto;width:64px}
+.announce__tag{flex:0 0 auto;font-size:12px;font-weight:700;color:var(--brand);background:rgba(30,136,229,.1);padding:3px 10px;border-radius:999px}
+.announce__title{color:#131726;text-decoration:none;font-size:15px;line-height:1.5}
+.announce__title:hover{color:var(--brand);text-decoration:underline}
+
+/* ---------- 站内搜索浮层 ---------- */
+.search{position:fixed;inset:0;z-index:120;display:none}
+.search.open{display:block}
+.search__backdrop{position:absolute;inset:0;background:rgba(13,42,74,.45);backdrop-filter:blur(3px)}
+.search__panel{position:absolute;top:14%;left:50%;transform:translateX(-50%);width:min(92vw,620px);background:#fff;border-radius:18px;padding:18px;box-shadow:0 30px 80px -30px rgba(0,0,0,.5);max-height:72vh;display:flex;flex-direction:column;overflow:hidden}
+.search__input{width:100%;border:1px solid rgba(30,136,229,.2);border-radius:12px;padding:14px 16px;font-size:16px;font-family:inherit;outline:none}
+.search__input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(30,136,229,.12)}
+.search__results{margin-top:12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.search__hint{color:#6a6577;font-size:14px;text-align:center;padding:18px 0}
+.search__result{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid rgba(30,136,229,.1);border-radius:12px;padding:12px 14px;cursor:pointer;font-family:inherit;transition:background .2s}
+.search__result:hover{background:rgba(30,136,229,.06)}
+.search__cat{flex:0 0 auto;font-size:12px;font-weight:700;color:var(--brand);background:rgba(30,136,229,.1);padding:3px 10px;border-radius:999px}
+.search__label{font-size:14.5px;color:#131726;line-height:1.4}
+
+@media (max-width:560px){
+}
+
+/* ============================================================
+   液体玻璃（Liquid Glass）系统 —— 苹果 visionOS / iOS 26 风格
+   核心：折射扭曲 + 焦散光斑 + 色彩偏移 + 表面张力凸起 + 动态流动
+   与"毛玻璃"的区别：毛玻璃=均匀blur；液体玻璃=非均匀折射+光学效应
+   回滚：删除本段即恢复实底。
+   ============================================================ */
+
+/* 让背景流动光晕颜色更明显，玻璃才好"读"出色彩 */
+body::before{
+  position:fixed;inset:0;z-index:-2;content:"";
+  background:
+    radial-gradient(42% 42% at 18% 28%,rgba(30,136,229,.22),transparent 60%),
+    radial-gradient(40% 40% at 82% 22%,rgba(66,165,245,.18),transparent 60%),
+    radial-gradient(44% 44% at 62% 82%,rgba(13,71,161,.16),transparent 60%);
+  filter:blur(52px);
+}
+
+/* ---------- 全局流体玻璃背景（内容之下、始终漂移的高斯模糊光球） ---------- */
+.bg-liquid{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.65}
+.bg-orb--1{width:48vw;height:48vw;background:radial-gradient(circle,rgba(30,136,229,.52),transparent 68%);top:-14%;left:-10%;animation:orbDrift1 26s ease-in-out infinite}
+.bg-orb--2{width:42vw;height:42vw;background:radial-gradient(circle,rgba(66,165,245,.42),transparent 68%);top:6%;right:-12%;animation:orbDrift2 32s ease-in-out infinite}
+.bg-orb--3{width:40vw;height:40vw;background:radial-gradient(circle,rgba(13,71,161,.46),transparent 68%);bottom:-16%;left:24%;animation:orbDrift3 29s ease-in-out infinite}
+.bg-orb--4{width:32vw;height:32vw;background:radial-gradient(circle,rgba(66,165,245,.38),transparent 68%);bottom:2%;right:2%;animation:orbDrift4 23s ease-in-out infinite}
+@keyframes orbDrift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(7vw,5vh) scale(1.12)}}
+@keyframes orbDrift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-6vw,8vh) scale(1.10)}}
+@keyframes orbDrift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,-6vh) scale(1.15)}}
+@keyframes orbDrift4{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vw,-5vh) scale(1.08)}}
+@keyframes orbBreathe{0%,100%{filter:blur(64px)}50%{filter:blur(104px)}}
+
+/* ═══════════ 液体玻璃核心：表面张力凸起 + 折射高光 + 焦散叠加 ═══════════ */
+.liquid{position:relative;isolation:isolate;border-radius:inherit}
+
+/* 第一层：表面张力凸起（中心亮边缘暗 = 液滴凸透镜感） */
+.liquid::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:radial-gradient(120% 120% at 40% 35%,
+    rgba(255,255,255,.48) 0%,
+    rgba(255,255,255,.18) 35%,
+    transparent 70%);
+}
+
+/* 第二层：SVG 折射扭曲高光（光线穿过液体时的扭曲） */
+.liquid::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:linear-gradient(130deg,
+    rgba(255,255,255,.55) 0%,
+    rgba(255,220,180,.25) 22%,
+    rgba(255,255,255,0) 45%,
+    rgba(180,220,255,.15) 65%,
+    rgba(255,255,255,.38) 88%,
+    rgba(255,200,160,.18) 100%);
+  filter:url(#liquid);mix-blend-mode:screen;opacity:.92;
+}
+.liquid > *{position:relative;z-index:1}
+
+/* 第三层：焦散光斑动画（模拟阳光穿过水/玻璃的亮斑游走） */
+.liquid .caustics{
+  position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  opacity:.35;
+  background:
+    radial-gradient(ellipse 80px 60px at 20% 30%,rgba(255,245,210,.7),transparent 70%),
+    radial-gradient(ellipse 100px 70px at 75% 55%,rgba(210,235,255,.5),transparent 70%),
+    radial-gradient(ellipse 60px 90px at 50% 80%,rgba(255,225,185,.5),transparent 70%);
+  filter:url(#caustic);
+  mix-blend-mode:screen;
+  animation:causticsFlow 12s ease-in-out infinite alternate;
+}
+@keyframes causticsFlow{
+  0%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(8px,-6px) scale(1.06)}
+  66%{transform:translate(-6px,8px) scale(1.03)}
+  100%{transform:translate(4px,4px) scale(1.07)}
+}
+
+/* 基础玻璃壳（所有液态元素共享） */
+.liquid{
+  border:1px solid rgba(255,255,255,.45);
+  box-shadow:
+    inset 0 0 0 .5px rgba(255,255,255,.40),
+    inset 0 1px 1px rgba(255,255,255,.65),
+    inset 0 -1px 1px rgba(100,30,30,.06),
+    0 16px 40px -20px rgba(13,71,161,.32),
+    0 4px 14px -4px rgba(0,0,0,.04);
+}
+
+/* ---------- 导航：液体玻璃（默认透明，滚动后淡入玻璃底，无底边线） ---------- */
+.nav.liquid{background:transparent!important;border-bottom:none!important;box-shadow:none}
+/* 导航整条不再渲染液体伪元素（按钮各自处理玻璃；避免满宽直边玻璃条） */
+.nav.liquid::before,.nav.liquid::after{display:none}
+.nav.liquid.scrolled{
+  background:rgba(255,255,255,.42)!important;
+  backdrop-filter:saturate(180%) blur(18px)!important;
+  -webkit-backdrop-filter:saturate(180%) blur(18px)!important;
+  border-bottom:none!important;
+  box-shadow:0 10px 30px -20px rgba(13,71,161,.16);
+}
+.nav__inner{position:relative;z-index:1}
+
+/* ---------- Hero 主视觉：无框沉浸式（光球即背景，文字直接浮于其上） ---------- */
+.hero__content.liquid{
+  background:transparent;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  border-radius:0;padding:40px 36px;
+  border:none;box-shadow:none;
+}
+.hero__content.liquid > *{position:relative;z-index:1}
+
+/* ═════════ 全站液态玻璃元素（核心升级：色彩折射 + 焦散感 + 流动光带 + 强制圆润） ═════════ */
+.card,
+.post-card,
+.news__item,
+.about__points li,
+.contact__form,
+.contact__row,
+.org__node--staff,
+.honor,
+.announce,
+.recruit__apply,
+.search__panel,
+.modal__panel,
+.activity,
+.timeline__item,
+.stat:not(.facts .stat),
+.profile-item,
+.kicker,
+.note,
+.empty-note,
+.btn--ghost{
+  position:relative;isolation:isolate;
+  /* 强制所有玻璃元素圆润（覆盖任何基础样式的小圆角或直角） */
+  border-radius:18px!important;
+  overflow:hidden; /* 关键：裁切伪元素到圆角内，消除角落"缺块" */
+  background-color:rgba(255,255,255,.46);
+  backdrop-filter:blur(20px) saturate(175%);
+  -webkit-backdrop-filter:blur(20px) saturate(175%);
+  border:1px solid rgba(255,255,255,.48);
+  box-shadow:
+    0 20px 44px -22px rgba(30,136,229,.26),
+    0 4px 12px -4px rgba(0,0,0,.04),
+    inset 0 .5px 0 rgba(255,255,255,.52),
+    inset 0 0 0 .5px rgba(255,255,255,.12);
+  /* 静态色散渐变（暖金→冷蓝→白，模拟光线在液体内折射的色散感——静态不动） */
+  background-image:linear-gradient(125deg,
+    transparent 0%,
+    rgba(255,240,200,.18) 20%,
+    transparent 38%,
+    rgba(200,225,255,.12) 55%,
+    transparent 70%,
+    rgba(255,220,185,.14) 88%,
+    transparent 100%
+  );
+}
+
+/* 学院名片深色区：统计卡 + 资料卡也强制圆润 */
+.facts .stat{border-radius:18px!important;overflow:hidden}
+.facts .profile-item{border-radius:16px!important;overflow:hidden}
+
+/* 每个玻璃元素内部：表面张力凸起层（::before）+ 折射扭曲层（::after） */
+.card::before,.post-card::before,.news__item::before,.about__points li::before,
+.contact__form::before,.contact__row::before,.org__node--staff::before,
+.announce::before,.recruit__apply::before,.activity::before,.timeline__item::before,
+.stat:not(.facts .stat)::before,.kicker::before,.btn--ghost::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:radial-gradient(130% 130% at 35% 30%,
+    rgba(255,255,255,.40) 0%,
+    rgba(255,255,255,.14) 40%,
+    transparent 70%);
+}
+.card::after,.post-card::after,.news__item::after,.about__points li::after,
+.contact__form::after,.contact__row::after,.org__node--staff::after,
+.announce::after,.recruit__apply::after,.activity::after,.timeline__item::after,
+.stat:not(.facts .stat)::after,.kicker::after,.btn--ghost::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:linear-gradient(135deg,
+    rgba(255,255,255,.48) 0%,rgba(255,230,190,.18) 25%,
+    transparent 50%,rgba(190,220,255,.14) 75%,
+    rgba(255,255,255,.32) 100%);
+  filter:url(#liquidSoft);mix-blend-mode:screen;opacity:.78;
+}
+
+/* hover：折射增强 + 焦散浮现 + 色彩偏移更明显（加速过渡，去掉 backdrop-filter transition 防闪烁） */
+.card:hover,.post-card:hover,.news__item:hover,.about__points li:hover,
+.contact__row:hover,.org__node--staff:hover,
+.recruit__apply:hover,.activity:hover,.stat:not(.facts .stat):hover{
+  background-color:rgba(255,255,255,.62);
+  border-color:rgba(255,255,255,.75);
+  backdrop-filter:blur(26px) saturate(190%);
+  -webkit-backdrop-filter:blur(26px) saturate(190%);
+  box-shadow:
+    0 28px 58px -20px rgba(30,136,229,.36),
+    0 6px 18px -5px rgba(0,0,0,.06),
+    inset 0 .5px 0 rgba(255,255,255,.72),
+    inset 0 0 0 .5px rgba(255,255,255,.22);
+  transition:background-color .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease);
+}
+.card:hover::after,.post-card:hover::after,.news__item:hover::after,
+.recruit__apply:hover::after,.activity:hover::after{
+  opacity:1; /* hover 折射更清晰 */
+}
+
+/* 确保容器内的文字/输入框始终在玻璃伪元素之上（避免折射层压住内容导致发虚） */
+.card > *,.post-card > *,.news__item > *,.about__points li > *,
+.contact__form > *,.contact__row > *,.org__node--staff > *,
+.announce > *,.recruit__apply > *,.activity > *,.timeline__item > *,
+.stat:not(.facts .stat) > *,.profile-item > *,.note > *,.empty-note > *,.btn--ghost > *{
+  position:relative;z-index:1;
+}
+
+/* ---- 特殊元素的液体玻璃微调 ---- */
+
+/* 文章卡封面区不玻璃化（保持图片清晰） */
+.post-card__media{backdrop-filter:none;-webkit-backdrop-filter:none;background:transparent}
+
+/* 组织架构节点：根/组长用红金实心（更有分量），干事用液体玻璃 */
+.org__node--root,
+.org__node--lead{
+  background:var(--accent-grad)!important;
+  color:#fff;border:0;
+  box-shadow:0 14px 30px -16px rgba(30,136,229,.6), inset 0 1px 1px rgba(255,255,255,.25);
+}
+.org__node--root::before,.org__node--root::after,
+.org__node--lead::before,.org__node--lead::after{display:none} /* 实心节点不需要折射层 */
+.org__node--staff{
+  background-color:rgba(255,255,255,.40);
+  backdrop-filter:blur(18px) saturate(165%);-webkit-backdrop-filter:blur(18px) saturate(165%);
+}
+
+/* 特色活动封面：保留彩色渐变（怕被洗白） */
+.activity__media{backdrop-filter:none;-webkit-backdrop-filter:none}
+.activity__media::after{opacity:.95}
+.activity__media::before,.activity__media::after{display:none}
+
+/* 数据统计卡片（学院名片区）：浅底上需更实的白底+蓝描边，保证清晰可读，同时保留玻璃质感 */
+.facts .stat{
+  background-color:rgba(255,255,255,.72);
+  backdrop-filter:blur(20px) saturate(175%);
+  -webkit-backdrop-filter:blur(20px) saturate(175%);
+  border:1px solid rgba(30,136,229,.18);
+  border-radius:18px!important;
+  overflow:hidden;
+  box-shadow:
+    0 20px 44px -22px rgba(30,136,229,.30),
+    0 4px 12px -4px rgba(0,0,0,.05),
+    inset 0 .5px 0 rgba(255,255,255,.7),
+    inset 0 0 0 .5px rgba(30,136,229,.06);
+}
+.facts .stat:hover{
+  background-color:rgba(255,255,255,.85);
+  border-color:rgba(30,136,229,.32);
+  backdrop-filter:blur(26px) saturate(190%);
+  -webkit-backdrop-filter:blur(26px) saturate(190%);
+  box-shadow:
+    0 28px 58px -20px rgba(30,136,229,.40),
+    0 6px 18px -5px rgba(0,0,0,.06),
+    inset 0 .5px 0 rgba(255,255,255,.8),
+    inset 0 0 0 .5px rgba(30,136,229,.10);
+}
+/* 恢复折射伪元素（之前被 display:none 隐藏了） */
+.facts .stat::before,
+.facts .stat::after{display:block}
+
+.facts .profile-item{
+  background-color:rgba(255,255,255,.72);
+  backdrop-filter:blur(20px) saturate(175%);
+  -webkit-backdrop-filter:blur(20px) saturate(175%);
+  border:1px solid rgba(30,136,229,.18);
+  border-radius:16px!important;
+  overflow:hidden;
+  box-shadow:
+    0 20px 44px -22px rgba(30,136,229,.30),
+    0 4px 12px -4px rgba(0,0,0,.05),
+    inset 0 .5px 0 rgba(255,255,255,.7),
+    inset 0 0 0 .5px rgba(30,136,229,.06);
+}
+.facts .profile-item:hover{
+  background-color:rgba(255,255,255,.85);
+  border-color:rgba(30,136,229,.32);
+}
+.facts .profile-item::before,
+.facts .profile-item::after{display:block}
+
+/* Kicker 标签：紧凑液体玻璃胶囊 */
+.kicker{
+  padding:6px 16px;border-radius:999px;
+  backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:
+    inset 0 .5px 0 rgba(255,255,255,.60),
+    inset 0 0 0 .5px rgba(255,255,255,.15),
+    0 6px 18px -8px rgba(30,136,229,.18);
+}
+.kicker::after{display:none}
+
+/* 时间线项：液体玻璃 */
+.timeline__item{
+  border-left-color:rgba(30,136,229,.20);
+  background-color:rgba(255,255,255,.42);
+  border-radius:14px;padding:14px 18px;margin-left:4px;
+  border:1px solid rgba(255,255,255,.48);
+  border-left:3px solid var(--accent-2);
+  backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);
+}
+.timeline__item::before{
+  background:var(--accent-2);
+  box-shadow:0 0 0 4px rgba(66,165,245,.18), 0 0 12px rgba(66,165,245,.25);
+}
+
+/* 荣誉卡年份徽章保持红金实心（无折射层） */
+.honor__year{
+  background:linear-gradient(135deg,var(--brand),#0d47a1)!important;
+  box-shadow:0 6px 18px -6px rgba(30,136,229,.5), inset 0 1px 0 rgba(255,255,255,.25);
+}
+
+/* 搜索 / 弹层：液体玻璃面板（背后暗色，更通透） */
+.search__backdrop{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.search__panel,
+.modal__panel{
+  background-color:rgba(255,255,255,.78);
+  border:1px solid rgba(255,255,255,.65);
+  backdrop-filter:blur(22px) saturate(175%);-webkit-backdrop-filter:blur(22px) saturate(175%);
+}
+.modal__panel{
+  box-shadow:0 40px 80px -30px rgba(20,23,28,.5),
+    inset 0 .5px 0 rgba(255,255,255,.65),
+    inset 0 0 0 .5px rgba(255,255,255,.20);
+}
+
+/* ═══════ 板块容器液体玻璃（section 本身也成为圆角玻璃层） ═══════ */
+.section--soft{
+  background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,.22));
+  backdrop-filter:blur(10px) saturate(155%);-webkit-backdrop-filter:blur(10px) saturate(155%);
+  box-shadow:0 -26px 54px -36px rgba(30,136,229,.24),0 26px 54px -36px rgba(30,136,229,.24);
+  position:relative;isolation:isolate;
+  border-radius:28px;
+  margin:0 14px;
+}
+.section--soft::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:radial-gradient(140% 120% at 45% 20%,
+    rgba(255,255,255,.25) 0%,transparent 55%);
+}
+
+/* 页脚：更强液体玻璃暗底 */
+.footer{
+  background:
+    radial-gradient(800px 460px at 0% 0%,rgba(30,136,229,.14),transparent 55%),
+    linear-gradient(180deg,var(--dark-2),var(--dark-1));
+  backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);
+  border-top:1px solid rgba(255,255,255,.06);
+  position:relative;isolation:isolate;
+}
+.footer::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 200px 100px at 10% 80%,rgba(66,165,245,.08),transparent 60%),
+    radial-gradient(ellipse 180px 90px at 90% 20%,rgba(30,136,229,.07),transparent 60%);
+}
+
+/* 回到顶部按钮：液体玻璃药丸 */
+.to-top{
+  background:rgba(255,255,255,.20);
+  backdrop-filter:blur(16px) saturate(155%);-webkit-backdrop-filter:blur(16px) saturate(155%);
+  border:1px solid rgba(255,255,255,.26);
+  box-shadow:
+    inset 0 .5px 0 rgba(255,255,255,.28),
+    inset 0 0 0 .5px rgba(255,255,255,.10),
+    0 8px 20px -8px rgba(13,71,161,.26);
+  color:#fff;
+}
+.to-top:hover{
+  background:rgba(255,255,255,.32);
+  transform:translateY(-3px) scale(1.05);
+  backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);
+}
+
+/* ---------- 搜索 / 弹层：高斯模糊淡入（display:none→可过渡，去 backdrop-filter transition 防闪） ---------- */
+.search{display:block;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .2s var(--ease),visibility .2s var(--ease)}
+.search.open{visibility:visible;opacity:1;pointer-events:auto}
+.search__backdrop{opacity:0;transition:opacity .2s var(--ease)}
+.search.open .search__backdrop{opacity:1;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.search__panel{opacity:0;transform:translateX(-50%) translateY(10px) scale(.98);filter:blur(10px);transition:opacity .2s var(--ease),transform .25s var(--ease),filter .25s var(--ease)}
+.search.open .search__panel{opacity:1;transform:translateX(-50%) translateY(0) scale(1);filter:blur(0)}
+.modal__panel{transform:translateY(24px) scale(.96);filter:blur(12px);transition:transform .25s var(--ease),filter .25s var(--ease)}
+.modal.open .modal__panel{transform:none;filter:blur(0)}
+
+/* ---------- 入场：在高斯模糊中浮现（reveal--blur 强化） ---------- */
+.reveal:not(.in){will-change:transform,opacity,filter}
+.reveal--blur{filter:blur(12px);transform:translateY(22px) scale(.985)}
+
+/* ---------- 刷新率自适应（JS 注入 html[data-hz] / [data-device]） ---------- */
+/* 高刷新(≥120)：开启光球“呼吸式高斯模糊”，高光更慢更润 */
+html[data-hz="120"] .bg-orb--1,html[data-hz="144"] .bg-orb--1,html[data-hz="240"] .bg-orb--1,
+html[data-hz="120"] .bg-orb--3,html[data-hz="144"] .bg-orb--3,html[data-hz="240"] .bg-orb--3{
+  animation:orbDrift1 26s ease-in-out infinite, orbBreathe 15s ease-in-out infinite;
+}
+html[data-hz="120"] .bg-orb--2,html[data-hz="144"] .bg-orb--2,html[data-hz="240"] .bg-orb--2,
+html[data-hz="120"] .bg-orb--4,html[data-hz="144"] .bg-orb--4,html[data-hz="240"] .bg-orb--4{
+  animation:orbDrift2 32s ease-in-out infinite, orbBreathe 18s ease-in-out infinite;
+}
+/* 低刷新(≤90 / 未知)：关闭持续高光游动，避免掉帧；保留静态玻璃与入场模糊 */
+html[data-hz="60"] .card,html[data-hz="60"] .post-card,html[data-hz="60"] .news__item,
+html[data-hz="60"] .about__points li,html[data-hz="60"] .contact__row,
+html[data-hz="60"] .org__node--staff,html[data-hz="60"] .recruit__apply,html[data-hz="60"] .announce,
+html[data-hz="60"] .search__panel,html[data-hz="60"] .modal__panel{animation:none}
+html:not([data-hz]) .card,html:not([data-hz]) .post-card,html:not([data-hz]) .news__item,
+html:not([data-hz]) .about__points li,html:not([data-hz]) .contact__row,
+html:not([data-hz]) .org__node--staff,html:not([data-hz]) .recruit__apply,html:not([data-hz]) .announce,
+html:not([data-hz]) .search__panel,html:not([data-hz]) .modal__panel{animation:none}
+
+/* ---------- FPS 监测浮标（?fps=1 时显示） ---------- */
+.fps-hud{position:fixed;left:12px;bottom:12px;z-index:300;font:600 12px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:#fff;background:rgba(13,42,74,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  padding:8px 11px;border-radius:10px;border:1px solid rgba(255,255,255,.18);pointer-events:none;white-space:nowrap;
+  box-shadow:0 8px 24px -10px rgba(0,0,0,.5)}
+
+/* ---------- 减弱动画：关掉持续动效与光球，保留静态玻璃与折射层 ---------- */
+@media (prefers-reduced-motion:reduce){
+  .bg-orb{display:none}
+  .card,.post-card,.news__item,.about__points li,.contact__row,.org__node--staff,
+  .recruit__apply,.announce,.search__panel,.modal__panel{animation:none;background-position:200% 0}
+  .liquid::after,.card::after,.post-card::after,.news__item::after,
+  .recruit__apply::after,.activity::after,.timeline__item::after,.kicker::after,.btn--ghost::after{filter:none}
+  .reveal:not(.in){will-change:auto}
+}
+
+/* ═══ 关于我们三栏：强制液态玻璃（高特异性，确保覆盖基础样式） ═══ */
+#about .about__points li{
+  background-color:rgba(255,255,255,.46)!important;
+  backdrop-filter:blur(20px) saturate(175%)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(175%)!important;
+  border:1px solid rgba(255,255,255,.48)!important;
+  border-radius:18px!important;
+  overflow:hidden!important;
+  box-shadow:
+    0 20px 44px -22px rgba(30,136,229,.26),
+    0 4px 12px -4px rgba(0,0,0,.04),
+    inset 0 .5px 0 rgba(255,255,255,.52),
+    inset 0 0 0 .5px rgba(255,255,255,.12)!important;
+  transition:background-color .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease)!important;
+}
+#about .about__points li:hover{
+  background-color:rgba(255,255,255,.62)!important;
+  border-color:rgba(255,255,255,.75)!important;
+  backdrop-filter:blur(26px) saturate(190%)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(190%)!important;
+  transform:none!important;
+  box-shadow:
+    0 28px 58px -20px rgba(30,136,229,.36),
+    0 6px 18px -5px rgba(0,0,0,.06),
+    inset 0 .5px 0 rgba(255,255,255,.72),
+    inset 0 0 0 .5px rgba(255,255,255,.22)!important;
+}
+/* 确保三栏卡片的伪元素折射层正常渲染 */
+#about .about__points li::before,
+#about .about__points li::after{display:block!important}
