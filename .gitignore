@@ -1,0 +1,29 @@
+# 项目内部数据（含记忆/密钥，切勿提交到公开仓库）
+.workbuddy/
+
+# 服务端（CloudStudio/GitHub Pages 均为纯静态托管，不需要）
+server/
+
+# 构建/部署工具脚本：scripts/deploy.js 被 .github/workflows/deploy.yml 预检调用，必须随仓库提交
+# （仅 scripts/ 下与部署相关的脚本；server 端脚本已在上面被忽略）
+
+# 内部文档与 SQL（非站点运行所需）
+*.md
+*.sql
+supabase-guide.html
+KEY_ROTATION.md
+DEPLOY.md
+MOBILE_TEST_CHECKLIST.md
+
+# 服务端密钥（切勿提交）
+server/.env
+server/admin.pass
+server/.session_secret
+
+# 依赖 / 构建产物
+node_modules/
+npm-debug.log*
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
