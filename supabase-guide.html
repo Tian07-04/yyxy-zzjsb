@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Supabase 接入图文指引 · 组织建设部官网</title>
+<style>
+  :root{
+    --bg:#0b0f1a; --panel:#121829; --panel2:#0e1424; --ink:#e8edf7; --muted:#9aa7c2;
+    --line:#26314d; --accent:#4c7dff; --accent2:#7b5cff; --green:#34d399; --red:#ff5d6c;
+    --radius:16px; --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 700px at 80% -10%,rgba(76,125,255,.15),transparent 60%),var(--bg);
+    color:var(--ink);font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:48px 22px 80px}
+  header.hero{text-align:center;margin-bottom:14px}
+  .badge{display:inline-block;font-size:12px;letter-spacing:2px;color:var(--accent);background:rgba(76,125,255,.12);
+    padding:6px 14px;border-radius:999px;font-weight:700;margin-bottom:18px}
+  h1{font-size:clamp(28px,5vw,42px);margin:0 0 10px;font-weight:900;letter-spacing:1px}
+  h1 span{background:linear-gradient(100deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{color:var(--muted);max-width:640px;margin:0 auto;font-size:15.5px}
+  .flow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:26px 0 8px}
+  .flow span{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;color:var(--muted)}
+  .flow span b{color:var(--ink)}
+  .flow .ar{color:var(--accent);border:0;background:none;padding:8px 2px}
+
+  section.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 26px 30px;margin:22px 0;position:relative;overflow:hidden}
+  section.step::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:linear-gradient(var(--accent),var(--accent2))}
+  .step__no{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;
+    background:linear-gradient(100deg,var(--accent),var(--accent2));color:#fff;font-weight:800;font-size:15px;margin-right:12px}
+  .step__title{font-size:20px;font-weight:800;margin:0;display:flex;align-items:center}
+  .step__sub{color:var(--muted);font-size:14px;margin:6px 0 18px}
+  p{margin:10px 0}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{background:#0a0e1a;border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-size:13px;color:#cfe0ff;
+    font-family:"SFMono-Regular",Consolas,monospace}
+  .codebox{background:#070b15;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;
+    font-family:"SFMono-Regular",Consolas,monospace;font-size:13px;color:#cfe0ff;line-height:1.65}
+  .codebox .k{color:#7b9cff}.codebox .s{color:#7ee2b8}.codebox .c{color:#5f6f8f}
+  .note{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);border-radius:10px;
+    padding:12px 16px;font-size:13.5px;color:#bdf3da;margin:14px 0}
+  .warn{background:rgba(255,93,108,.08);border:1px solid rgba(255,93,108,.3);border-radius:10px;
+    padding:12px 16px;font-size:13.5px;color:#ffc4cb;margin:14px 0}
+  ul.tips{margin:10px 0;padding-left:20px;color:var(--muted);font-size:14px}
+  ul.tips li{margin:6px 0}
+
+  /* 模拟 Supabase 控制台截图 */
+  .shot{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0;background:var(--panel2)}
+  .shot__bar{display:flex;align-items:center;gap:7px;padding:9px 12px;background:#0a0e1a;border-bottom:1px solid var(--line)}
+  .dot{width:11px;height:11px;border-radius:50%}
+  .dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+  .shot__url{margin-left:10px;font-size:12px;color:var(--muted);background:#121829;border:1px solid var(--line);
+    border-radius:6px;padding:3px 10px}
+  .shot__body{display:flex;min-height:200px}
+  .shot__side{width:150px;background:#0c1120;border-right:1px solid var(--line);padding:12px 8px;font-size:12.5px}
+  .shot__side .grp{color:var(--muted);font-size:11px;letter-spacing:1px;margin:10px 6px 4px}
+  .shot__side .it{padding:6px 8px;border-radius:7px;color:#c4cfe6;margin:2px 0}
+  .shot__side .it.active{background:rgba(76,125,255,.18);color:#fff;font-weight:600}
+  .shot__main{flex:1;padding:16px;font-size:13px;color:var(--muted)}
+  .shot__main h4{color:var(--ink);font-size:14px;margin:0 0 12px}
+  .kv{display:flex;align-items:center;gap:10px;background:#0c1120;border:1px solid var(--line);border-radius:8px;
+    padding:9px 12px;margin:8px 0}
+  .kv .lab{width:120px;color:var(--muted)}
+  .kv .val{color:#cfe0ff;font-family:monospace;font-size:12px;flex:1}
+  .kv .copy{background:rgba(76,125,255,.15);color:var(--accent);border:0;border-radius:6px;padding:4px 9px;font-size:11px;cursor:default}
+  .keyblock{background:#070b15;border:1px dashed var(--line);border-radius:8px;padding:10px 12px;margin-top:10px;
+    font-family:monospace;font-size:11px;color:#7ee2b8;word-break:break-all}
+  .ring{position:relative}
+  .ring::after{content:"";position:absolute;border:2px solid var(--red);border-radius:10px;pointer-events:none;
+    box-shadow:0 0 0 3px rgba(255,93,108,.25)}
+  .ring.s1::after{inset:-4px -4px -4px -4px}
+  .ring.s2::after{inset:-4px -6px}
+  .ring.s3::after{inset:-5px -6px}
+  .arrow{display:inline-block;color:var(--red);font-weight:800;margin-left:8px}
+  .tagred{display:inline-block;background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;
+    border-radius:6px;margin-left:8px;vertical-align:middle}
+
+  .endcard{text-align:center;background:linear-gradient(120deg,rgba(76,125,255,.14),rgba(123,92,255,.14));
+    border:1px solid var(--line);border-radius:var(--radius);padding:30px;margin-top:30px}
+  .endcard h3{margin:0 0 8px;font-size:21px}
+  .endcard p{color:var(--muted);margin:6px 0}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:30px}
+  .btn{display:inline-block;margin-top:14px;background:linear-gradient(100deg,var(--accent),var(--accent2));
+    color:#fff;font-weight:700;padding:12px 24px;border-radius:999px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="badge">SUPABASE · 接入指引</div>
+    <h1>把官网接到云端<span>自动同步</span></h1>
+    <p class="lead">按下面 5 步操作，约 5 分钟完成。接好后，你登录后台改内容，<b>全站访客立即看到最新版</b>，不用再找我重新部署。</p>
+    <div class="flow">
+      <span><b>①</b> 开项目</span><span class="ar">→</span>
+      <span><b>②</b> 拿密钥</span><span class="ar">→</span>
+      <span><b>③</b> 跑建表</span><span class="ar">→</span>
+      <span><b>④</b> 填配置</span><span class="ar">→</span>
+      <span><b>⑤</b> 重新部署</span>
+    </div>
+  </header>
+
+  <!-- STEP 1 -->
+  <section class="step">
+    <h2 class="step__title"><span class="step__no">1</span>注册并新建 Supabase 项目</h2>
+    <p class="step__sub">Supabase 是免费云端数据库，官网直接注册，无需信用卡。</p>
+    <ul class="tips">
+      <li>打开 <a href="https://supabase.com" target="_blank" rel="noopener">https://supabase.com</a> ，点右上角 <b>Start your project</b> 用 GitHub 或邮箱注册登录。</li>
+      <li>登录后进入控制台，点 <b>New project</b>（新建项目）。</li>
+      <li>填写：<b>项目名称</b>（如 <code>hhxy-music-org</code>）、设置<b>数据库密码</b>（记一下，后面基本用不到但别忘）、<b>地区</b>选离国内近的（如 Singapore / Tokyo），最后点 <b>Create new project</b>。</li>
+      <li>等待约 1–2 分钟，项目创建完成会自动进入项目首页。</li>
+    </ul>
+    <div class="note">✅ 免费套餐（Free）足够本网站使用：存储 500MB、每月 5 万次请求，完全够一个学院部门官网。</div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step">
+    <h2 class="step__title"><span class="step__no">2</span>复制 Project URL 和 anon public key</h2>
+    <p class="step__sub">这两个值要填进网站的 <code>config.js</code>，让后台能连上你的云库。</p>
+    <p>进入项目后，左侧菜单点 <b>Project Settings</b>（齿轮图标）→ 选 <b>API</b>。</p>
+
+    <div class="shot">
+      <div class="shot__bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="shot__url">supabase.com/dashboard/project/&lt;你的项目&gt;/settings/api</span>
+      </div>
+      <div class="shot__body">
+        <div class="shot__side">
+          <div class="grp">PROJECT SETTINGS</div>
+          <div class="it">General</div>
+          <div class="it active">API <span class="tagred">点这里</span></div>
+          <div class="it">Database</div>
+          <div class="it">Authentication</div>
+          <div class="grp">其它</div>
+          <div class="it">SQL Editor</div>
+        </div>
+        <div class="shot__main">
+          <h4>Project API keys</h4>
+          <div class="kv ring s1">
+            <span class="lab">Project URL</span>
+            <span class="val">https://abcd1234.supabase.co</span>
+            <span class="copy">复制</span>
+          </div>
+          <div class="keyblock ring s3">Project API keys → anon public<br>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxxxxx.xxxxxxxx（很长一串）</div>
+          <p style="margin-top:12px">⚠️ 只复制 <b>anon public</b>（绿色钥匙图标），不要复制 secret key。</p>
+        </div>
+      </div>
+    </div>
+    <div class="warn">⚠️ <b>anon public key</b> 是公开的（写在前端代码里），所以我们在第 ③ 步用「后台密码」做写入保护，外人只能读、不能改你的内容，安全可控。</div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step">
+    <h2 class="step__title"><span class="step__no">3</span>在 SQL Editor 执行建表脚本</h2>
+    <p class="step__sub">只跑一次，自动建好「站点内容表 + 党建/团建文章表」并设好权限。</p>
+    <ul class="tips">
+      <li>左侧菜单点 <b>SQL Editor</b> → <b>New query</b>。</li>
+      <li>把项目里的 <code>supabase-schema.sql</code> 全部内容粘贴进去（也在下方折叠代码里）。</li>
+      <li>点右上角 <b>Run</b> 执行，出现 <code class="s">Success</code> 即建表完成。</li>
+    </ul>
+    <p>📄 脚本文件就在你网站根目录：<code>supabase-schema.sql</code>。下面是它的核心内容：</p>
+    <div class="codebox">
+<span class="c">-- 站点静态内容（除文章外）</span>
+<span class="k">create table if not exists</span> site_content (
+  id text primary key,
+  content jsonb not null,
+  updated_at timestamptz <span class="k">default</span> now()
+);
+
+<span class="c">-- 党建 / 团建 文章</span>
+<span class="k">create table if not exists</span> articles (
+  id uuid primary key <span class="k">default</span> gen_random_uuid(),
+  section text <span class="k">not null</span>,  <span class="c">-- 'party' 或 'league'</span>
+  title text, date text, cover text, body text,
+  category text <span class="k">default</span> 'news',  <span class="c">-- news/notice/publicity</span>
+  created_at timestamptz <span class="k">default</span> now()
+);
+
+<span class="c">-- 开启行级安全 + 任何人可读，仅后台密码可写</span>
+<span class="k">alter table</span> site_content <span class="k">enable row level security</span>;
+<span class="k">alter table</span> articles <span class="k">enable row level security</span>;
+<span class="c">-- （脚本内已写好 select 公开、写入需 x-admin-key = 后台密码 的策略）</span>
+    </div>
+    <div class="note">💡 脚本里的写入密码默认是 <code>88888888</code>，必须和 <code>config.js</code> 里的 <code>ADMIN_PASSWORD</code> 一致。如果你改了后台密码，记得同步改脚本第 37、41 行的 <code>'88888888'</code> 再执行一次。</div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step">
+    <h2 class="step__title"><span class="step__no">4</span>把密钥填进 config.js</h2>
+    <p class="step__sub">打开网站目录下的 <code>assets/js/config.js</code>，替换两个空值。</p>
+    <div class="codebox">
+<span class="c">// assets/js/config.js  （改前两个值即可）</span>
+window.APP_CONFIG = {
+  SUPABASE_URL:     <span class="s">"https://abcd1234.supabase.co"</span>,   <span class="c">// ← 填第②步的 Project URL</span>
+  SUPABASE_ANON_KEY:<span class="s">"eyJhbGci...很长一串"</span>,            <span class="c">// ← 填第②步的 anon key</span>
+
+  ADMIN_PASSWORD:   <span class="s">"88888888"</span>                          <span class="c">// 后台密码，可改</span>
+};
+    </div>
+    <div class="warn">⚠️ 填的时候只替换双引号 <code>""</code> 里面的内容，<b>不要删掉引号和外面的逗号</b>。填错会导致后台连不上。</div>
+    <p>你填好后把这个文件发我（或直接告诉我「已填好，重新部署」），我来做第 ⑤ 步。</p>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="step">
+    <h2 class="step__title"><span class="step__no">5</span>重新部署 + 验证同步</h2>
+    <p class="step__sub">我把带密钥的版本重新部署到云端，你验证「改一条 → 全站即时更新」。</p>
+    <ul class="tips">
+      <li>部署完成后，打开 <code>/admin.html</code> 用密码登录后台。</li>
+      <li>进入「党建工作」或「团建工作」标签页，<b>新增一篇文章</b>并点「保存全部」。</li>
+      <li>打开官网前台（非后台页面），刷新 —— 你刚发的文章<b>应该立即出现</b>，无需任何额外操作。</li>
+      <li>换手机/换浏览器打开官网，也能看到，说明已真正云端同步 ✅。</li>
+    </ul>
+    <div class="note">✅ 至此完成全自动同步。以后你只用在后台编辑 → 保存，线上访客永远是最新版。</div>
+  </section>
+
+  <div class="endcard">
+    <h3>🎉 接好后能干什么</h3>
+    <p>· 后台随时发布党建 / 团建<strong>新闻、通知、公示</strong>（图文）</p>
+    <p>· 改任意板块文字、活动、组织架构成员，点保存即生效</p>
+    <p>· 多设备、多人共用同一后台，数据统一存在云端</p>
+    <a class="btn" href="admin.html">前往后台 →</a>
+  </div>
+
+  <footer>
+    黄淮学院音乐学院 · 组织建设部官网 ｜ Supabase 接入图文指引<br>
+    遇到问题把报错截图发我，我帮你定位。
+  </footer>
+
+</div>
+</body>
+</html>
