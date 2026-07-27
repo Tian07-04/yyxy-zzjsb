@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>关于本站 · 黄淮学院音乐学院组织建设部</title>
+  <meta name="description" content="关于本网站：建站目的、技术说明与更新日志。" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="黄淮学院音乐学院 · 组织建设部" />
+  <meta property="og:title" content="关于本站 · 黄淮学院音乐学院组织建设部" />
+  <meta property="og:description" content="关于本网站：建站目的、技术说明与更新日志。" />
+  <meta property="og:url" content="https://8d740b0d5c764707a3f0a89a9732758f.app.codebuddy.work/about.html" />
+  <meta property="og:image" content="https://8d740b0d5c764707a3f0a89a9732758f.app.codebuddy.work/assets/img/og-cover.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%BC%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/theme-extras.css" />
+  <style>
+    .doc{max-width:840px;margin:0 auto;padding:120px 24px 80px;color:var(--ink-soft)}
+    .doc h1{font-size:clamp(28px,5vw,40px);margin-bottom:8px;color:var(--ink)}
+    .doc .lead{margin:18px 0 8px}
+    .doc h2{font-size:22px;margin:36px 0 14px;color:var(--brand)}
+    .doc p,.doc li{line-height:1.9;font-size:15.5px}
+    .doc a{color:var(--brand)}
+    .doc a.back{display:inline-block;margin-top:36px;color:var(--brand);font-weight:600}
+    /* 更新日志时间轴 */
+    .log{list-style:none;padding:0;margin:18px 0;border-left:2px solid var(--line)}
+    .log li{position:relative;padding:0 0 22px 26px}
+    .log li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--accent-grad);box-shadow:0 0 0 3px #fff}
+    .log .date{font-size:13px;font-weight:700;color:var(--brand)}
+    .log .what{margin-top:2px}
+    .tags{display:inline-block;font-size:12px;font-weight:700;color:var(--brand);background:var(--accent-soft);padding:2px 10px;border-radius:999px;margin-right:8px}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main" id="skipLink">跳到主要内容</a>
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="index.html"><span class="nav__logo">🎼</span><span class="nav__brand-text">音乐学院 · 组织建设部</span></a>
+      <a class="nav__admin" href="index.html">← 返回首页</a>
+    </div>
+  </header>
+  <main class="doc" id="main">
+    <h1 id="docTitle"></h1>
+    <p class="lead" id="docLead"></p>
+    <div id="docBody"></div>
+    <a class="back" id="docBack" href="index.html">← 返回首页</a>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/content.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/pages.js"></script>
+  <script>window.renderDocPage('about');</script>
+</body>
+</html>
