@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>后台登录 · 黄淮学院音乐学院组织建设部</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%BC%3C/text%3E%3C/svg%3E" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{height:100%}
+    body{
+      font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+      min-height:100%;display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(600px 400px at 50% 40%,rgba(30,136,229,.08),transparent 60%),
+        linear-gradient(180deg,#fdf4f5 0%,#fbf4ec 60%,#fdf1f0 100%);
+      color:#131726;line-height:1.7;-webkit-font-smoothing:antialiased;
+      padding:24px
+    }
+    .login-wrap{width:100%;max-width:400px}
+    .login-card{
+      background:#fff;border-radius:20px;padding:40px 32px 32px;
+      box-shadow:0 30px 80px -24px rgba(140,15,28,.35),0 0 0 1px rgba(30,136,229,.06);
+      text-align:center
+    }
+    .login-logo{font-size:36px;margin-bottom:8px}
+    .login-card h1{
+      font-family:"Noto Serif SC","SimSun",serif;font-size:22px;font-weight:700;
+      color:#131726;margin-bottom:4px
+    }
+    .login-sub{font-size:14px;color:#6a6577;margin-bottom:28px}
+    .login-field{margin-bottom:18px;text-align:left}
+    .login-field label{display:block;font-size:13.5px;font-weight:600;color:#4a4456;margin-bottom:6px}
+    .login-field input{
+      width:100%;padding:12px 14px;border:1.5px solid #e2dde0;border-radius:12px;
+      font-size:15px;font-family:inherit;outline:none;transition:border-color .25s,box-shadow .25s;
+      background:#fafafa
+    }
+    .login-field input:focus{border-color:#1e88e5;box-shadow:0 0 0 3px rgba(30,136,229,.1);background:#fff}
+    .login-btn{
+      width:100%;padding:13px;border:none;border-radius:12px;font-size:16px;font-weight:700;
+      font-family:inherit;cursor:pointer;color:#fff;
+      background:linear-gradient(135deg,#1e88e5,#0d47a1);
+      box-shadow:0 8px 20px -6px rgba(30,136,229,.5);
+      transition:transform .2s,box-shadow .2s
+    }
+    .login-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px -6px rgba(30,136,229,.6)}
+    .login-btn:active{transform:translateY(0)}
+    .login-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+    .login-err{margin-top:12px;font-size:13.5px;color:#1e88e5;background:rgba(30,136,229,.06);
+      padding:8px 12px;border-radius:8px;display:none
+    }
+    .login-err.show{display:block}
+    .login-footer{margin-top:16px;text-align:center;font-size:13px;color:#a39eaa}
+    .login-footer a{color:#1e88e5;text-decoration:none;font-weight:500}
+    .login-footer a:hover{text-decoration:underline}
+    /* 装饰：顶部细线 */
+    .login-card::before{content:'';display:block;width:60px;height:3px;border-radius:2px;
+      background:linear-gradient(90deg,#1e88e5,#42a5f5);margin:0 auto 20px}
+    @media (max-width:480px){
+      .login-card{padding:32px 24px 24px;border-radius:16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">🎼</div>
+      <h1>组织建设部 · 后台管理</h1>
+      <p class="login-sub">黄淮学院音乐学院</p>
+      <form id="loginForm" autocomplete="off">
+        <div class="login-field">
+          <label for="pwd">管理员密码</label>
+          <input id="pwd" type="password" placeholder="请输入后台密码" autocomplete="current-password" required autofocus />
+        </div>
+        <button type="submit" class="login-btn" id="submitBtn">登 录</button>
+        <p class="login-err" id="loginErr">密码错误，请重试</p>
+      </form>
+      <p class="login-footer"><a href="index.html">← 返回网站首页</a></p>
+    </div>
+  </div>
+
+  <!-- Supabase 客户端（用于服务端登录） -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js?v=20260727e"></script>
+  <script>
+    (function(){
+      'use strict';
+      const form = document.getElementById('loginForm');
+      const pwdInput = document.getElementById('pwd');
+      const submitBtn = document.getElementById('submitBtn');
+      const errEl = document.getElementById('loginErr');
+
+      // 后台服务地址：优先用 config.js 的 API_BASE（本地服务），否则相对当前源
+      var API = (window.APP_CONFIG && window.APP_CONFIG.API_BASE || '').replace(/\/$/, '');
+      function adminUrl(p) { return (API ? API : '') + p; }
+
+      // 检查是否已登录（有有效会话），直接跳转
+      (function checkSession(){
+        try {
+          // 如果已有 localStorage 标记且未过期，直接进后台
+          var session = JSON.parse(localStorage.getItem('site_admin_session') || 'null');
+          if (session && session.ok && session.ts > Date.now() - 86400000) {
+            window.location.replace(adminUrl('/admin.html'));
+            return;
+          }
+        } catch(e) {}
+      })();
+
+      function showError(msg) {
+        errEl.textContent = msg || '密码错误，请重试';
+        errEl.classList.add('show');
+        pwdInput.focus();
+        pwdInput.select();
+      }
+
+      function hideError() { errEl.classList.remove('show'); }
+
+      pwdInput.addEventListener('input', hideError);
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        hideError();
+        var pwd = pwdInput.value.trim();
+        if (!pwd) { showError('请输入密码'); return; }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = '验证中…';
+
+        try {
+          // 尝试服务端登录（需要 Node 服务运行，地址取 API_BASE 或当前源）
+          var res = await fetch(adminUrl('/api/admin/login'), {
+            method: 'POST',
+            credentials: 'include',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ password: pwd })
+          });
+
+          if (res.ok) {
+            // 服务端登录成功，设置标记并跳转
+            localStorage.setItem('site_admin_session', JSON.stringify({ ok: true, ts: Date.now() }));
+            window.location.replace(adminUrl('/admin.html'));
+            return;
+          }
+
+          // 服务端不可用或拒绝 → 本地模式：比对 localStorage 存的密码哈希
+          var localHash = localStorage.getItem('site_admin_pwd') || '';
+          var inputHash = btoa(unescape(encodeURIComponent(pwd)));
+
+          if (localHash && inputHash === localHash) {
+            localStorage.setItem('site_admin_session', JSON.stringify({ ok: true, ts: Date.now() }));
+            window.location.replace('admin.html');
+            return;
+          }
+
+          // 首次使用 / 无密码设置：用默认密码 "admin"（生产环境请修改）
+          if (pwd === 'admin' && !localHash) {
+            localStorage.setItem('site_admin_pwd', inputHash);
+            localStorage.setItem('site_admin_session', JSON.stringify({ ok: true, ts: Date.now() }));
+            window.location.replace('admin.html');
+            return;
+          }
+
+          showError('密码错误，请重试');
+        } catch(err) {
+          // 网络错误 / CORS → 纯本地模式
+          var localHash = localStorage.getItem('site_admin_pwd') || '';
+          var inputHash = btoa(unescape(encodeURIComponent(pwd)));
+          if ((localHash && inputHash === localHash) || (!localHash && pwd === 'admin')) {
+            if (!localHash) localStorage.setItem('site_admin_pwd', inputHash);
+            localStorage.setItem('site_admin_session', JSON.stringify({ ok: true, ts: Date.now() }));
+            window.location.replace('admin.html');
+            return;
+          }
+          showError('登录失败：' + (err.message || '未知错误'));
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = '登 录';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
