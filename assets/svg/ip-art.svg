@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 380" fill="none" role="img" aria-label="组织建设部专属插画：音符与蓝绸">
+  <style>
+    .float{animation:floaty 7s ease-in-out infinite}
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    @media (prefers-reduced-motion:reduce){.float{animation:none}}
+  </style>
+  <defs>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e88e5"/><stop offset="1" stop-color="#0d47a1"/>
+    </linearGradient>
+    <linearGradient id="blue2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7cc0ff"/><stop offset="1" stop-color="#42a5f5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 蓝绸飘带 -->
+  <path d="M20 300 C 120 250, 160 360, 260 300 S 420 250, 430 320" stroke="url(#blue2)" stroke-width="10" stroke-linecap="round" opacity="0.8"/>
+  <path d="M10 332 C 130 292, 180 382, 300 322 S 430 282, 440 352" stroke="url(#blue)" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- 音符群（蓝） -->
+  <g class="float" fill="url(#blue2)">
+    <g transform="translate(70,120)">
+      <ellipse cx="0" cy="40" rx="13" ry="10" transform="rotate(-20)"/>
+      <rect x="11" y="0" width="5" height="42" rx="2"/>
+      <path d="M16 0 q22 6 18 26 q-2 -14 -18 -12 z"/>
+    </g>
+    <g transform="translate(150,66) scale(1.2)">
+      <ellipse cx="0" cy="40" rx="13" ry="10" transform="rotate(-20)"/>
+      <rect x="11" y="0" width="5" height="42" rx="2"/>
+      <path d="M16 0 q22 6 18 26 q-2 -14 -18 -12 z"/>
+    </g>
+    <g transform="translate(252,140) scale(0.9)">
+      <ellipse cx="0" cy="40" rx="13" ry="10" transform="rotate(-20)"/>
+      <rect x="11" y="0" width="5" height="42" rx="2"/>
+    </g>
+  </g>
+
+</svg>
